@@ -1,0 +1,25 @@
+# Builds both static GDB variants and exposes them as job artifacts.
+# Requires a runner with Docker support.
+
+stages:
+  - build
+
+build-static-gdb:
+  stage: build
+  image: ubuntu:24.04
+  variables:
+    DEBIAN_FRONTEND: noninteractive
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends
+        build-essential curl ca-certificates xz-utils
+        libgmp-dev libmpfr-dev libexpat1-dev zlib1g-dev libncurses-dev texinfo
+  script:
+    - bash build.sh
+    - dist/gdb-*-static-nopython --version | head -1
+    - dist/gdb-*-static-python -batch -ex 'python import sys; print(sys.version)'
+  artifacts:
+    name: "static-gdb-${CI_COMMIT_REF_SLUG}"
+    paths:
+      - dist/
+    expire_in: 30 days
