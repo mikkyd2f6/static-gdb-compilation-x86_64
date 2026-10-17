@@ -88,24 +88,6 @@ install/*/    full install trees per variant
 dist/         stripped final binaries
 ```
 
-## CI
-
-`.gitlab-ci.yml` builds both variants on every push and exposes `dist/` as job
-artifacts. It needs a GitLab runner with Docker (`ubuntu:24.04` image installs its
-own dependencies in `before_script`).
-
-## Publishing this repo
-
-After creating the project on GitLab:
-
-```bash
-git remote add origin git@gitlab.com:<user>/static-gdb.git
-git push -u origin main
-```
-
-Prefer attaching the `dist/` binaries to a GitLab **Release** rather than committing
-them — 30–40 MB binaries bloat clones permanently.
-
 ## License
 
 GDB is GPLv3; statically-linked GDB binaries are derivative works, so if you
